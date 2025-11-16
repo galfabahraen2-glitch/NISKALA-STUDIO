@@ -1,0 +1,103 @@
+:root{
+  --amber-1: #e7b56a;
+  --amber-2: #d79a4a;
+  --cream: #fff8ef;
+  --brown: #382318;
+  --glass: rgba(255,255,255,0.6);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+  background: linear-gradient(180deg,#fffdfb 0%, #fbf3e6 50%, #f3e9d6 100%);
+  color:var(--brown);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* header */
+.hero{
+  padding:36px 18px;
+  text-align:center;
+  background:linear-gradient(90deg, rgba(215,150,80,0.07), rgba(230,180,110,0.04));
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 20px rgba(55,40,40,0.06);
+}
+.brand h1{
+  margin:0;
+  font-size:2.2rem;
+  color:var(--amber-2);
+  letter-spacing:0.6px;
+  text-shadow:0 6px 22px rgba(215,150,80,0.12);
+}
+.tag{
+  margin-top:6px;
+  color:#6d4b36;
+  opacity:0.9;
+}
+
+/* container */
+.container{
+  max-width:900px;
+  margin:28px auto;
+  padding:22px;
+  display:grid;
+  grid-template-columns:1fr 380px;
+  gap:20px;
+}
+
+/* upload card */
+.upload-card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,250,245,0.9));
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 10px 30px rgba(50,30,20,0.06);
+}
+.label{
+  display:block;
+  margin:10px 0 6px;
+  font-weight:600;
+  color:#6d3f1a;
+}
+input[type=file], select, input[type=range]{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid rgba(215,150,80,0.18);
+  background:var(--cream);
+  margin-bottom:10px;
+}
+.sliders label{display:block; margin:8px 0; font-size:0.95rem;}
+
+/* buttons */
+button, .btn{
+  display:inline-block;
+  padding:12px 16px;
+  border-radius:12px;
+  background:linear-gradient(90deg,var(--amber-2), var(--amber-1));
+  color:white;
+  font-weight:700;
+  text-decoration:none;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(215,140,50,0.18);
+  margin-top:10px;
+}
+.btn.ghost{ background:transparent; color:var(--amber-2); box-shadow:none; border:1px solid rgba(215,150,80,0.12);}
+
+/* result card */
+.result-card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,250,245,0.95));
+  border-radius:14px;
+  padding:18px;
+  height:fit-content;
+  box-shadow:0 8px 24px rgba(40,20,10,0.06);
+}
+
+/* footer */
+.footer{ text-align:center; padding:20px; color:#6b4d3a; opacity:0.9; }
+
+/* responsive */
+@media (max-width:900px){
+  .container{ grid-template-columns: 1fr; padding:12px; }
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Niskala Studio – AI Voice Enhancer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="brand">
+      <h1>Niskala Studio</h1>
+      <p class="tag">AI Voice Enhancer — Amber · White · Luxury · Cinematic</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="upload-card">
+      <label class="label">Upload Vocal (RAW)</label>
+      <input type="file" accept="audio/*" id="vocalFile" />
+
+      <label class="label">Upload Instrumental (Optional)</label>
+      <input type="file" accept="audio/*" id="musicFile" />
+
+      <label class="label">Enhancement Style</label>
+      <select id="styleSelect">
+        <option value="warm">Warm</option>
+        <option value="bright">Bright</option>
+        <option value="airy">Airy</option>
+        <option value="strong">Strong</option>
+        <option value="ambient">Ambient</option>
+      </select>
+
+      <div class="sliders">
+        <label>Clarity <input type="range" id="clarity" min="0" max="100" value="30"></label>
+        <label>Warmth <input type="range" id="warmth" min="0" max="100" value="30"></label>
+        <label>Presence <input type="range" id="presence" min="0" max="100" value="20"></label>
+      </div>
+
+      <button id="generateBtn">Generate Enhanced Vocal</button>
+
+      <div id="status" class="status">Ready — upload a vocal and press Generate.</div>
+    </section>
+
+    <section class="result-card" id="resultCard" style="display:none;">
+      <h2>Result</h2>
+      <audio id="player" controls></audio>
+      <div class="actions">
+        <a id="downloadWav" class="btn" href="#" download="niskala_enhanced.wav">Download WAV</a>
+        <a id="downloadMp3" class="btn" href="#" download="niskala_enhanced.mp3">Download MP3</a>
+        <button id="regenBtn" class="btn ghost">Re-generate</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; Niskala Studio — Built with client-side AI (WebGPU / WASM placeholders)</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
