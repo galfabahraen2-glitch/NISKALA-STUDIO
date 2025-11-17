@@ -1,15 +1,15 @@
-// Niskala Studio – Browser Based Vocal Enhancer (Stable Version)
+// Niskala Studio – Browser Based Vocal Enhancer (Clean Stable Version)
 
 // GLOBAL
 let vocalFile = null;
 let audioCtx = null;
 
-// Upload vocal handler
-document.getElementById("vocalfile").addEventListener("change", e => {
+// Handle upload vocal
+document.getElementById("vocalFile").addEventListener("change", e => {
     vocalFile = e.target.files[0];
 });
 
-// Button click
+// Handle button click
 document.getElementById("generateBtn").addEventListener("click", () => {
     if (!vocalFile) {
         alert("Unggah vocal file terlebih dahulu.");
@@ -21,71 +21,70 @@ document.getElementById("generateBtn").addEventListener("click", () => {
 async function processVocal() {
     document.getElementById("status").innerText = "Processing...";
 
-    // ACTIVATE AUDIO CONTEXT on click (needed by Chrome & Vercel)
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     // Read file
     const arrayBuf = await vocalFile.arrayBuffer();
     const decoded = await audioCtx.decodeAudioData(arrayBuf);
 
-    // Offline context for processing
+    // Offline rendering
     const offlineCtx = new OfflineAudioContext(
         decoded.numberOfChannels,
         decoded.length,
         decoded.sampleRate
     );
 
-    // SOURCE
     const src = offlineCtx.createBufferSource();
     src.buffer = decoded;
 
-    // EFFECT 1 – Noise Reduction (soft gate)
+    // Soft Noise Gate
     const noiseGate = offlineCtx.createDynamicsCompressor();
     noiseGate.threshold.value = -55;
     noiseGate.ratio.value = 12;
 
-    // EFFECT 2 – EQ (lowshelf + highshelf)
+    // EQ LOW
     const low = offlineCtx.createBiquadFilter();
     low.type = "lowshelf";
     low.frequency.value = 180;
     low.gain.value = 4;
 
+    // EQ HIGH
     const high = offlineCtx.createBiquadFilter();
     high.type = "highshelf";
     high.frequency.value = 5000;
     high.gain.value = 6;
 
-    // EFFECT 3 – Vocal Compressor
+    // Vocal Compressor
     const comp = offlineCtx.createDynamicsCompressor();
     comp.threshold.value = -25;
     comp.ratio.value = 5;
     comp.attack.value = 0.005;
 
-    // CHAIN
+    // CONNECT CHAIN
     src.connect(noiseGate)
-        .connect(low)
-        .connect(high)
-        .connect(comp)
-        .connect(offlineCtx.destination);
+       .connect(low)
+       .connect(high)
+       .connect(comp)
+       .connect(offlineCtx.destination);
 
     src.start(0);
 
-    // Render
     const rendered = await offlineCtx.startRendering();
 
-    // Convert to WAV
-    const wavBlob = await bufferToWav(rendered);
+    // Convert → WAV
+    const wavBlob = bufferToWav(rendered);
     const wavURL = URL.createObjectURL(wavBlob);
 
     // Insert to player
     document.getElementById("player").src = wavURL;
     document.getElementById("downloadWav").href = wavURL;
-    document.getElementById("resultCard").style.display = "block";
 
+    // Show result card
+    document.getElementById("resultCard").style.display = "block";
     document.getElementById("status").innerText = "Done!";
 }
 
-// Convert AudioBuffer → WAV Blob
+// AudioBuffer → WAV Blob
 function bufferToWav(buffer) {
     const numOfChan = buffer.numberOfChannels,
         length = buffer.length * numOfChan * 2 + 44,
@@ -98,7 +97,6 @@ function bufferToWav(buffer) {
         offset = 0,
         pos = 0;
 
-    // Write WAV header
     writeString("RIFF"); pos += 4;
     view.setUint32(pos, length - 8, true); pos += 4;
     writeString("WAVE"); pos += 4;
@@ -132,52 +130,4 @@ function bufferToWav(buffer) {
         for (let i = 0; i < s.length; i++)
             view.setUint8(pos + i, s.charCodeAt(i));
     }
-                                            }    comp.ratio.setValueAtTime(6, audioCtx.currentTime);
-
-    // Connect chain
-    source.connect(noiseGate)
-          .connect(eqLow)
-          .connect(eqHigh)
-          .connect(comp)
-          .connect(audioCtx.destination);
-
-    // Render processed audio
-    let offlineCtx = new OfflineAudioContext(
-        vocalBuffer.numberOfChannels,
-        vocalBuffer.length,
-        vocalBuffer.sampleRate
-    );
-
-    let v = offlineCtx.createBufferSource();
-    v.buffer = vocalBuffer;
-
-    v.connect(offlineCtx.destination);
-    v.start(0);
-
-    let rendered = await offlineCtx.startRendering();
-
-    // Export WAV
-    let wavBlob = audioBufferToWav(rendered);
-    let wavURL = URL.createObjectURL(wavBlob);
-
-    // Inject into player
-    let player = document.getElementById("player");
-    player.src = wavURL;
-
-    // Show result
-    document.getElementById("resultCard").style.display = "block";
-    document.getElementById("downloadWav").href = wavURL;
-
-    document.getElementById("status").innerText = "Done!";
 }
-
-// ================================
-// BUTTON HANDLER
-// ================================
-document.getElementById("generateBtn").addEventListener("click", () => {
-    if (!vocalFile) {
-        alert("Please upload a vocal file first!");
-        return;
-    }
-    processAudio();
-});
